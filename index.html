@@ -2,86 +2,176 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brightest Star</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For You</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
-        body, html { margin: 0; padding: 0; background: #000814; color: white; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
-        #intro { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #2b3a67; position: relative; z-index: 10; }
-        .lotus-btn { width: 80px; cursor: pointer; filter: drop-shadow(0 0 10px #ffd700); transition: 0.3s; }
-        .section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; opacity: 0; transform: translateY(30px); }
-        #dino-guide { position: fixed; bottom: 20px; right: 20px; width: 100px; z-index: 100; display: none; border-radius: 15px; }
-        .bubble { position: fixed; bottom: 130px; right: 30px; background: white; color: black; padding: 15px; border-radius: 20px; font-size: 0.9rem; max-width: 200px; display: none; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        #letter-img { max-width: 90%; max-height: 75vh; border: 8px solid white; display: none; margin-top: 20px; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
-        .btn { background: #ffd700; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; margin-top: 20px; color: #000814; transition: 0.3s; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { 
+            margin: 0; padding: 0; background: #000814; color: white; 
+            font-family: 'Segoe UI', sans-serif; overflow: hidden; height: 100%; width: 100%;
+        }
+        
+        .page {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; 
+            align-items: center; text-align: center; padding: 30px;
+            opacity: 0; visibility: hidden; z-index: 10;
+        }
+
+        .active { opacity: 1; visibility: visible; }
+
+        #video-bg {
+            position: fixed; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
+            width: auto; height: auto; transform: translate(-50%, -50%);
+            z-index: -1; opacity: 0.4; object-fit: cover; display: none;
+        }
+
+        /* Dino & Bubble */
+        #dino-guide { position: fixed; bottom: 20px; right: 20px; width: 85px; z-index: 100; display: none; }
+        .bubble { 
+            position: fixed; bottom: 110px; right: 20px; 
+            background: white; color: black; padding: 12px; 
+            border-radius: 15px; font-size: 0.8rem; 
+            width: 150px; display: none; z-index: 100;
+        }
+
+        /* Game Elements */
+        #vball {
+            position: absolute; width: 60px; height: 60px;
+            cursor: pointer; display: none; z-index: 60;
+            filter: drop-shadow(0 0 10px #ffd700);
+        }
+        #score-board {
+            position: absolute; top: 20px; font-size: 1.2rem; color: #ffd700;
+            display: none; z-index: 70; font-weight: bold;
+        }
+
+        #letter-img { max-width: 100%; max-height: 65vh; border: 5px solid white; border-radius: 4px; }
+        .lotus-btn { width: 80px; cursor: pointer; filter: drop-shadow(0 0 15px #ffd700); }
+        .snowflake { position: fixed; top: -10px; color: white; pointer-events: none; z-index: 50; animation: fall linear infinite; }
+        @keyframes fall { to { transform: translateY(105vh); } }
     </style>
 </head>
 <body>
 
     <audio id="bdy-song" src="Yellow.mp3"></audio>
+    <video id="video-bg" loop muted playsinline>
+        <source src="saturn_video.mp4" type="video/mp4">
+    </video>
 
-    <div id="intro">
-        <img src="https://img.icons8.com/ios/100/ffd700/lotus.png" class="lotus-btn" onclick="start()">
-        <p style="margin-top: 20px; color: #ffd700; letter-spacing: 2px;">Tap to Begin</p>
-    </div>
-
+    <div id="score-board">Hits: <span id="hits">0</span>/5</div>
+    <img id="vball" src="https://img.icons8.com/color/96/volleyball.png" onclick="hitBall()">
     <img id="dino-guide" src="dino.jpg">
     <div id="speech" class="bubble"></div>
 
-    <div class="section" id="s1">
+    <div id="p0" class="page active" style="background: #2b3a67; z-index: 200;">
+        <img src="https://img.icons8.com/ios/100/ffd700/lotus.png" class="lotus-btn" onclick="startJourney()">
+        <h2 style="color: #ffd700; margin-top: 15px;">Happy Birthday!</h2>
+        <p style="font-size: 0.9rem;">Tap the Lotus to see your world.</p>
+    </div>
+
+    <div id="p1" class="page" onclick="nextPage()">
         <h1 style="color: #ffd700;">Look at the stars...</h1>
-        <p>They shine for a very special Libra today.</p>
-        <img src="https://img.icons8.com/fluency/200/saturn.png" style="margin-top:20px;">
+        <p>They shine for you.</p>
     </div>
 
-    <div class="section" id="s2">
-        <h2>A Mysterious Vibe</h2>
-        <p>A sharp mind like L, a heart as calm as a lotus, and the warmth of a snowy night.</p>
-        <div style="font-size: 50px; margin-top: 15px;">🏐 ❄️ 🐈</div>
+    <div id="p2" class="page">
+        <h2 style="color: #ffd700;">Volleyball Challenge!</h2>
+        <p>Keep the ball up to unlock your gift!</p>
     </div>
 
-    <div class="section" id="s3">
-        <h2>A Final Case File</h2>
-        <p>Even a great detective couldn't solve how much of a favorite you are.</p>
-        <button class="btn" onclick="reveal()">Open the Letter</button>
+    <div id="p3" class="page">
         <img id="letter-img" src="letter.jpg">
     </div>
 
     <script>
-        function start() {
-            const song = document.getElementById('bdy-song');
-            song.play().catch(e => console.log("Audio play failed, checking filename..."));
-            
-            gsap.to("#intro", { opacity: 0, duration: 1, onComplete: () => {
-                document.getElementById('intro').style.display = 'none';
-                document.getElementById('dino-guide').style.display = 'block';
-                document.getElementById('speech').style.display = 'block';
-                show(1, "Hey! Happy Birthday! I'm your Dino-guide.");
-            }});
+        let currentPage = 0;
+        let hits = 0;
+        let ballY = 0;
+        let ballX = 50;
+        let speed = 2;
+        let gameActive = false;
+
+        function startJourney() {
+            document.getElementById('bdy-song').play();
+            document.getElementById('video-bg').style.display = 'block';
+            document.getElementById('video-bg').play();
+            createSnow();
+            nextPage();
         }
 
-        function show(num, text) {
-            const el = "#s"+num;
-            gsap.to(el, { opacity: 1, y: 0, duration: 2 });
-            document.getElementById('speech').innerText = text;
-            
-            if(num < 3) {
-                setTimeout(() => {
-                    let nextText = num === 1 ? "I think you have that perfect Libra balance." : "Ready for the final mystery?";
-                    show(num + 1, nextText);
-                }, 6000);
+        function nextPage() {
+            document.getElementById('p' + currentPage).classList.remove('active');
+            currentPage++;
+            const nextP = document.getElementById('p' + currentPage);
+            nextP.classList.add('active');
+
+            const bubble = document.getElementById('speech');
+            document.getElementById('dino-guide').style.display = 'block';
+            bubble.style.display = 'block';
+
+            if(currentPage === 1) bubble.innerText = "Wow, look at those stars! Tap anywhere to move on.";
+            if(currentPage === 2) {
+                bubble.innerText = "Can you keep the ball up? 5 hits to win!";
+                setTimeout(startBallGame, 2000);
             }
         }
 
-        function reveal() {
-            document.getElementById('letter-img').style.display = 'block';
-            gsap.from("#letter-img", { scale: 0.8, opacity: 0, duration: 1.5 });
-            document.getElementById('speech').innerText = "Arigatho for reading... take care 恐竜.";
-            
-            // Auto scroll to the letter
-            setTimeout(() => {
-                document.getElementById('letter-img').scrollIntoView({ behavior: 'smooth' });
-            }, 100);
+        function startBallGame() {
+            gameActive = true;
+            document.getElementById('vball').style.display = 'block';
+            document.getElementById('score-board').style.display = 'block';
+            resetBall();
+            requestAnimationFrame(updateBall);
+        }
+
+        function resetBall() {
+            ballY = 10;
+            ballX = Math.random() * 70 + 10;
+            speed = 2;
+        }
+
+        function updateBall() {
+            if(!gameActive) return;
+            ballY += speed;
+            const ball = document.getElementById('vball');
+            ball.style.top = ballY + "%";
+            ball.style.left = ballX + "%";
+
+            if(ballY > 90) { // Ball missed
+                ballY = 10; 
+                ballX = Math.random() * 70 + 10;
+            }
+            requestAnimationFrame(updateBall);
+        }
+
+        function hitBall() {
+            hits++;
+            document.getElementById('hits').innerText = hits;
+            ballY -= 20; // Pop up
+            ballX = Math.random() * 70 + 10;
+            speed += 0.2; // Get faster
+
+            if(hits >= 5) {
+                gameActive = false;
+                document.getElementById('vball').style.display = 'none';
+                document.getElementById('score-board').style.display = 'none';
+                document.getElementById('speech').innerText = "Nice! You're a pro. Here is your letter...";
+                setTimeout(nextPage, 2000);
+            }
+        }
+
+        function createSnow() {
+            for (let i = 0; i < 30; i++) {
+                let flake = document.createElement('div');
+                flake.className = 'snowflake';
+                flake.innerText = '❄';
+                flake.style.left = Math.random() * 100 + 'vw';
+                flake.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                flake.style.opacity = Math.random();
+                document.body.appendChild(flake);
+            }
         }
     </script>
 </body>
