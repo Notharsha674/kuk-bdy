@@ -2,191 +2,248 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>For You</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday My Gurl!</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <style>
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { 
-            margin: 0; padding: 0; background: #000814; color: white; 
-            font-family: 'Segoe UI', sans-serif; overflow: hidden; height: 100%; width: 100%;
-        }
-        
-        /* Individual Page Styles */
-        .page {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center; 
-            align-items: center; text-align: center; padding: 30px;
-            opacity: 0; visibility: hidden; z-index: 10;
-        }
-        .active { opacity: 1; visibility: visible; }
-
-        /* Saturn Video Background */
-        #video-bg {
-            position: fixed; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
-            width: auto; height: auto; transform: translate(-50%, -50%);
-            z-index: -1; opacity: 0.5; object-fit: cover; display: none;
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
         }
 
-        /* Dino & Speech Bubble */
-        #dino-guide { position: fixed; bottom: 20px; right: 20px; width: 85px; z-index: 100; display: none; border-radius: 10px; }
-        .bubble { 
-            position: fixed; bottom: 115px; right: 20px; 
-            background: white; color: black; padding: 12px; 
-            border-radius: 15px; font-size: 0.8rem; 
-            width: 160px; display: none; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
 
-        /* Volleyball Game Elements */
+        /* Container Styling */
+        .container {
+            text-align: center;
+            z-index: 10;
+            padding: 3rem;
+            width: 90%;
+            max-width: 600px;
+            background-color: rgba(255, 255, 255, 0.25);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(255, 105, 180, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: none; /* Controlled by JS */
+        }
+
+        .active-page { display: block; animation: bounce-in 1.2s forwards; }
+
+        h1 {
+            font-size: 3.5rem;
+            color: #FF1493;
+            text-shadow: 0 0 10px white, 0 0 20px rgba(255, 20, 147, 0.3);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.6rem;
+            color: #8A2BE2;
+            margin-bottom: 2rem;
+            font-weight: bold;
+        }
+
+        /* Premium Buttons */
+        .next-button {
+            padding: 1.2rem 3.5rem;
+            font-size: 1.5rem;
+            background: linear-gradient(45deg, #FF1493, #8A2BE2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 20, 147, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .next-button:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 20, 147, 0.7);
+        }
+
+        /* Game Elements */
         #vball {
-            position: absolute; width: 65px; height: 65px;
-            cursor: pointer; display: none; z-index: 60;
-            filter: drop-shadow(0 0 10px #ffd700);
+            width: 100px;
+            cursor: pointer;
+            filter: drop-shadow(0 0 15px white);
+            margin: 20px auto;
         }
+
         #score-board {
-            position: absolute; top: 40px; font-size: 1.2rem; color: #ffd700;
-            display: none; z-index: 70; font-weight: bold; letter-spacing: 1px;
+            font-size: 2rem;
+            color: #FF1493;
+            margin-bottom: 10px;
         }
 
-        /* Letter Image Styling */
-        #letter-img { 
-            max-width: 100%; max-height: 65vh; 
-            border: 5px solid white; border-radius: 4px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        /* Letter Styling */
+        .letter-img {
+            width: 100%;
+            border-radius: 15px;
+            border: 8px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
 
-        .lotus-btn { width: 80px; cursor: pointer; filter: drop-shadow(0 0 15px #ffd700); transition: 0.3s; }
-        .lotus-btn:active { transform: scale(0.9); }
-        
-        .tap-hint { position: absolute; bottom: 40px; font-size: 0.75rem; color: #ffd700; opacity: 0.6; }
+        /* Floating Items */
+        .confetti, .balloon, .heart, .star {
+            position: absolute;
+            z-index: 1;
+            pointer-events: none;
+        }
 
-        /* Snow Effect */
-        .snowflake { position: fixed; top: -10px; color: white; pointer-events: none; z-index: 50; animation: fall linear infinite; }
-        @keyframes fall { to { transform: translateY(105vh); } }
+        /* Animations */
+        @keyframes bounce-in {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Audio Controls */
+        .audio-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        #mascot {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 100px;
+            z-index: 100;
+            border-radius: 20px;
+            border: 4px solid white;
+            display: none;
+        }
     </style>
 </head>
-<body onclick="handleTap()">
+<body>
 
-    <audio id="bdy-song" src="Yellow.mp3"></audio>
-    <video id="video-bg" loop muted playsinline>
-        <source src="saturn_video.mp4" type="video/mp4">
-    </video>
+    <audio id="birthday-song" loop>
+        <source src="Yellow.mp3" type="audio/mp3">
+    </audio>
 
-    <div id="score-board">HITS: <span id="hits">0</span>/5</div>
-    <img id="vball" src="https://img.icons8.com/color/96/volleyball.png" onclick="event.stopPropagation(); hitBall()">
-    <img id="dino-guide" src="dino.jpg">
-    <div id="speech" class="bubble"></div>
-
-    <div id="p0" class="page active" style="background: #2b3a67; z-index: 200;">
-        <img src="https://img.icons8.com/ios/100/ffd700/lotus.png" class="lotus-btn" onclick="event.stopPropagation(); startJourney()">
-        <h2 style="color: #ffd700; margin-top: 20px;">For the Brightest Star</h2>
-        <p style="font-size: 0.9rem; opacity: 0.8;">Tap the Lotus to Begin</p>
+    <div class="audio-controls">
+        <button id="play-pause" style="background:none; border:none; cursor:pointer; font-size:1.5rem;">▶️</button>
+        <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5">
     </div>
 
-    <div id="p1" class="page">
-        <h1 style="color: #ffd700; font-size: 2rem;">Look at the stars...</h1>
-        <p style="font-size: 1.1rem;">They shine for a special Libra today.</p>
-        <div class="tap-hint">Tap to continue</div>
+    <div id="page1" class="container active-page">
+        <h1>Happy Birthday, <br>My Gurl! 🎀</h1>
+        <div class="subtitle">Hey Bestie! Ready for the best surprise ever?</div>
+        <button class="next-button" onclick="startSurprise()">Let's Go! ✨</button>
     </div>
 
-    <div id="p2" class="page">
-        <h2 style="color: #ffd700;">Volleyball Time!</h2>
-        <p>Keep the ball up 5 times to unlock your gift.</p>
+    <div id="page2" class="container">
+        <h1>Volleyball Time! 🏐</h1>
+        <p class="subtitle">Tap the ball 5 times to unlock your gift!</p>
+        <div id="score-board">Hits: 0</div>
+        <img id="vball" src="https://img.icons8.com/color/150/volleyball.png" onclick="hitBall()">
     </div>
 
-    <div id="p3" class="page">
-        <img id="letter-img" src="letter.jpg">
-        <p style="margin-top: 15px; font-style: italic; font-size: 0.8rem;">Happy Birthday.</p>
+    <div id="page3" class="container">
+        <h1>For You... ❤️</h1>
+        <img src="letter.jpg" class="letter-img" alt="Birthday Letter">
+        <p class="subtitle">Happy Birthday, I'm so proud of you! 恐竜</p>
     </div>
+
+    <img id="mascot" src="dino.jpg" alt="Dino">
 
     <script>
-        let currentPage = 0;
+        const song = document.getElementById('birthday-song');
+        const playPauseBtn = document.getElementById('play-pause');
         let hits = 0;
-        let ballY = 0;
-        let ballX = 50;
-        let gameActive = false;
 
-        function startJourney() {
-            document.getElementById('bdy-song').play();
-            document.getElementById('video-bg').style.display = 'block';
-            document.getElementById('video-bg').play();
-            createSnow();
-            nextPage();
+        // Start Everything
+        function startSurprise() {
+            song.play().catch(e => console.log("Click play to start music"));
+            createFloatingElements();
+            showPage(2);
+            document.getElementById('mascot').style.display = 'block';
         }
 
-        function handleTap() {
-            // Only allow tap to advance on pages that aren't the game or intro
-            if (currentPage === 1) nextPage();
+        // Page Navigation
+        function showPage(num) {
+            document.querySelectorAll('.container').forEach(c => c.classList.remove('active-page'));
+            document.getElementById('page' + num).classList.add('active-page');
         }
 
-        function nextPage() {
-            document.getElementById('p' + currentPage).classList.remove('active');
-            currentPage++;
-            const nextP = document.getElementById('p' + currentPage);
-            nextP.classList.add('active');
-            gsap.from(nextP, { opacity: 0, y: 20, duration: 1 });
-
-            const mascot = document.getElementById('dino-guide');
-            const bubble = document.getElementById('speech');
-            mascot.style.display = 'block';
-            bubble.style.display = 'block';
-
-            if(currentPage === 1) bubble.innerText = "Hey! Happy Birthday! I'm your Dino-guide. Let's explore!";
-            if(currentPage === 2) {
-                bubble.innerText = "Ready? Tap the ball to keep it in the air!";
-                setTimeout(startBallGame, 1500);
-            }
-            if(currentPage === 3) bubble.innerText = "Nice job! You win. Here is your letter... take care 恐竜.";
-        }
-
-        function startBallGame() {
-            gameActive = true;
-            document.getElementById('vball').style.display = 'block';
-            document.getElementById('score-board').style.display = 'block';
-            ballY = 20;
-            ballX = 50;
-            animateBall();
-        }
-
-        function animateBall() {
-            if(!gameActive) return;
-            ballY += 0.8; // Gravity
-            const ball = document.getElementById('vball');
-            ball.style.top = ballY + "%";
-            ball.style.left = ballX + "%";
-
-            if(ballY > 85) { // Reset if missed
-                ballY = 20;
-                ballX = Math.random() * 60 + 20;
-            }
-            requestAnimationFrame(animateBall);
-        }
-
+        // Volleyball Logic
         function hitBall() {
             hits++;
-            document.getElementById('hits').innerText = hits;
-            ballY -= 25; // Bounce up
-            ballX = Math.random() * 60 + 20; // Move side to side
+            document.getElementById('score-board').innerText = "Hits: " + hits;
+            
+            // Premium Bounce Animation
+            gsap.to("#vball", {
+                y: -150, 
+                rotation: 360, 
+                duration: 0.4, 
+                yoyo: true, 
+                repeat: 1,
+                ease: "power2.out"
+            });
 
-            if(hits >= 5) {
-                gameActive = false;
-                document.getElementById('vball').style.display = 'none';
-                document.getElementById('score-board').style.display = 'none';
-                nextPage();
+            if (hits >= 5) {
+                setTimeout(() => showPage(3), 1000);
             }
         }
 
-        function createSnow() {
-            for (let i = 0; i < 30; i++) {
-                let flake = document.createElement('div');
-                flake.className = 'snowflake';
-                flake.innerText = '❄';
-                flake.style.left = Math.random() * 100 + 'vw';
-                flake.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                flake.style.opacity = Math.random();
-                document.body.appendChild(flake);
+        // Floating Logic (The colorful stuff)
+        function createFloatingElements() {
+            const symbols = ['🎈', '❤️', '✨', '🌸', '🎂'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const el = document.createElement('div');
+                    el.className = 'confetti';
+                    el.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+                    el.style.left = Math.random() * 100 + 'vw';
+                    el.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                    el.style.top = '-50px';
+                    document.body.appendChild(el);
+
+                    gsap.to(el, {
+                        y: window.innerHeight + 100,
+                        x: "+=" + (Math.random() * 200 - 100),
+                        rotation: 720,
+                        duration: Math.random() * 5 + 5,
+                        ease: "none",
+                        onComplete: () => el.remove()
+                    });
+                }, i * 300);
             }
         }
+
+        // Music Controls
+        playPauseBtn.addEventListener('click', () => {
+            if (song.paused) {
+                song.play();
+                playPauseBtn.innerText = "⏸️";
+            } else {
+                song.pause();
+                playPauseBtn.innerText = "▶️";
+            }
+        });
+
+        document.getElementById('volume').addEventListener('input', (e) => {
+            song.volume = e.target.value;
+        });
     </script>
 </body>
 </html>
