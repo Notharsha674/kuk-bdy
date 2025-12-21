@@ -6,106 +6,82 @@
     <title>Brightest Star</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
-        :root { --libra-gold: #ffd700; --deep-navy: #000814; }
-        body, html { margin: 0; padding: 0; background: var(--deep-navy); color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
-        
-        /* Intro Scene */
-        #hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle, #1b263b 0%, #000814 100%); position: relative; }
-        .lotus-loader { width: 80px; cursor: pointer; filter: drop-shadow(0 0 15px var(--libra-gold)); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .lotus-loader:hover { transform: scale(1.2) rotate(15deg); }
-
-        /* Mascot Styling */
-        #mascot { position: fixed; bottom: 30px; right: 30px; width: 100px; z-index: 1000; display: none; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
-        .bubble { position: fixed; bottom: 140px; right: 40px; background: white; color: #333; padding: 12px 20px; border-radius: 20px; font-size: 0.9rem; max-width: 200px; display: none; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-
-        /* Experience Sections */
-        .page { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; opacity: 0; transform: translateY(30px); }
-        .saturn { width: 250px; animation: float 6s ease-in-out infinite; margin-bottom: 20px; }
-        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-20px) rotate(5deg); } }
-
-        /* The Letter */
-        #letter-reveal { max-width: 500px; width: 90%; border: 12px solid white; border-radius: 2px; box-shadow: 0 0 30px rgba(255,215,0,0.3); display: none; }
-        .btn { background: none; border: 2px solid var(--libra-gold); color: var(--libra-gold); padding: 12px 30px; border-radius: 30px; cursor: pointer; font-size: 1rem; transition: 0.3s; margin-top: 20px; }
-        .btn:hover { background: var(--libra-gold); color: black; box-shadow: 0 0 20px var(--libra-gold); }
+        body, html { margin: 0; padding: 0; background: #000814; color: white; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
+        #intro { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #2b3a67; position: relative; z-index: 10; }
+        .lotus-btn { width: 80px; cursor: pointer; filter: drop-shadow(0 0 10px #ffd700); transition: 0.3s; }
+        .section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; opacity: 0; transform: translateY(30px); }
+        #dino-guide { position: fixed; bottom: 20px; right: 20px; width: 100px; z-index: 100; display: none; border-radius: 15px; }
+        .bubble { position: fixed; bottom: 130px; right: 30px; background: white; color: black; padding: 15px; border-radius: 20px; font-size: 0.9rem; max-width: 200px; display: none; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        #letter-img { max-width: 90%; max-height: 75vh; border: 8px solid white; display: none; margin-top: 20px; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        .btn { background: #ffd700; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; margin-top: 20px; color: #000814; transition: 0.3s; }
     </style>
 </head>
 <body>
 
-    <audio id="bgm" src="Yellow.mp3"></audio>
+    <audio id="bdy-song" src="Yellow.mp3"></audio>
 
-    <div id="hero">
-        <img src="https://img.icons8.com/ios/100/ffd700/lotus.png" class="lotus-loader" onclick="initiate()">
-        <p style="margin-top: 25px; letter-spacing: 3px; color: var(--libra-gold); font-weight: 300;">ENTER THE UNIVERSE</p>
+    <div id="intro">
+        <img src="https://img.icons8.com/ios/100/ffd700/lotus.png" class="lotus-btn" onclick="start()">
+        <p style="margin-top: 20px; color: #ffd700; letter-spacing: 2px;">Tap to Begin</p>
     </div>
 
-    <img id="mascot" src="dino.png">
+    <img id="dino-guide" src="dino.jpg">
     <div id="speech" class="bubble"></div>
 
-    <div id="experience">
-        <section class="page" id="p1">
-            <img src="https://img.icons8.com/fluency/240/saturn.png" class="saturn">
-            <h1 style="font-size: 2.5rem; color: var(--libra-gold);">Look at the stars...</h1>
-            <p style="font-style: italic; opacity: 0.8;">Look how they shine for you.</p>
-        </section>
+    <div class="section" id="s1">
+        <h1 style="color: #ffd700;">Look at the stars...</h1>
+        <p>They shine for a very special Libra today.</p>
+        <img src="https://img.icons8.com/fluency/200/saturn.png" style="margin-top:20px;">
+    </div>
 
-        <section class="page" id="p2">
-            <h2>The Libra Mystery</h2>
-            <p style="max-width: 600px; line-height: 1.6;">A sharp mind like L, a heart as calm as a lotus, and the energy of a volleyball match. You're a rare combination of everything beautiful.</p>
-            <div style="font-size: 40px; margin-top: 20px;">❄️ 🐈 🏐</div>
-        </section>
+    <div class="section" id="s2">
+        <h2>A Mysterious Vibe</h2>
+        <p>A sharp mind like L, a heart as calm as a lotus, and the warmth of a snowy night.</p>
+        <div style="font-size: 50px; margin-top: 15px;">🏐 ❄️ 🐈</div>
+    </div>
 
-        <section class="page" id="p3">
-            <h2>Something for you...</h2>
-            <p>Even a detective couldn't solve how much of a fav you are.</p>
-            <button class="btn" onclick="openLetter()">Open Letter</button>
-            <img id="letter-reveal" src="letter.jpg" style="margin-top: 30px;">
-        </section>
+    <div class="section" id="s3">
+        <h2>A Final Case File</h2>
+        <p>Even a great detective couldn't solve how much of a favorite you are.</p>
+        <button class="btn" onclick="reveal()">Open the Letter</button>
+        <img id="letter-img" src="letter.jpg">
     </div>
 
     <script>
-        const bgm = document.getElementById('bgm');
-        const mascot = document.getElementById('mascot');
-        const speech = document.getElementById('speech');
-
-        function initiate() {
-            bgm.play();
-            gsap.to("#hero", { opacity: 0, duration: 1.5, onComplete: () => {
-                document.getElementById('hero').style.display = 'none';
-                mascot.style.display = 'block';
-                speech.style.display = 'block';
-                startStory();
+        function start() {
+            const song = document.getElementById('bdy-song');
+            song.play().catch(e => console.log("Audio play failed, checking filename..."));
+            
+            gsap.to("#intro", { opacity: 0, duration: 1, onComplete: () => {
+                document.getElementById('intro').style.display = 'none';
+                document.getElementById('dino-guide').style.display = 'block';
+                document.getElementById('speech').style.display = 'block';
+                show(1, "Hey! Happy Birthday! I'm your Dino-guide.");
             }});
         }
 
-        function speak(text) {
-            speech.innerText = text;
-            gsap.fromTo(speech, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5 });
-        }
-
-        function startStory() {
-            showPage("#p1");
-            speak("Welcome! I'm your Dino-guide. Let's see why you're a star...");
+        function show(num, text) {
+            const el = "#s"+num;
+            gsap.to(el, { opacity: 1, y: 0, duration: 2 });
+            document.getElementById('speech').innerText = text;
             
-            setTimeout(() => {
-                showPage("#p2");
-                speak("Libras always find the perfect balance, don't they?");
-            }, 6000);
-
-            setTimeout(() => {
-                showPage("#p3");
-                speak("I have a secret case file for you to open.");
-            }, 12000);
+            if(num < 3) {
+                setTimeout(() => {
+                    let nextText = num === 1 ? "I think you have that perfect Libra balance." : "Ready for the final mystery?";
+                    show(num + 1, nextText);
+                }, 6000);
+            }
         }
 
-        function showPage(selector) {
-            gsap.to(selector, { opacity: 1, y: 0, duration: 2 });
-            window.scrollTo({ top: document.querySelector(selector).offsetTop, behavior: 'smooth' });
-        }
-
-        function openLetter() {
-            document.getElementById('letter-reveal').style.display = 'block';
-            gsap.from("#letter-reveal", { scale: 0.5, opacity: 0, duration: 1 });
-            speak("Take care, 恐竜...");
+        function reveal() {
+            document.getElementById('letter-img').style.display = 'block';
+            gsap.from("#letter-img", { scale: 0.8, opacity: 0, duration: 1.5 });
+            document.getElementById('speech').innerText = "Arigatho for reading... take care 恐竜.";
+            
+            // Auto scroll to the letter
+            setTimeout(() => {
+                document.getElementById('letter-img').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
         }
     </script>
 </body>
