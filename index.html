@@ -16,7 +16,7 @@
 
         .container {
             text-align: center; z-index: 10; padding: 2rem;
-            width: 95%; max-width: 650px; max-height: 85vh;
+            width: 95%; max-width: 500px; max-height: 85vh;
             background-color: rgba(255, 255, 255, 0.25);
             border-radius: 30px; backdrop-filter: blur(15px);
             box-shadow: 0 8px 32px rgba(255, 105, 180, 0.4);
@@ -26,39 +26,33 @@
 
         .active-page { display: flex; flex-direction: column; align-items: center; animation: bounce-in 0.8s forwards; }
 
-        h1 { font-size: 2rem; color: #FF1493; text-shadow: 0 0 10px white; margin-bottom: 10px; }
-        .subtitle { color: #8A2BE2; margin-bottom: 15px; font-weight: bold; font-size: 1rem; }
+        h1 { font-size: 1.8rem; color: #FF1493; text-shadow: 0 0 10px white; margin-bottom: 10px; }
+        .subtitle { color: #8A2BE2; margin-bottom: 15px; font-weight: bold; font-size: 0.9rem; }
 
         .next-button {
-            padding: 0.8rem 2.5rem; font-size: 1.2rem;
+            padding: 0.8rem 2rem; font-size: 1.1rem;
             background: linear-gradient(45deg, #FF1493, #8A2BE2);
             color: white; border: none; border-radius: 50px;
             cursor: pointer; box-shadow: 0 4px 15px rgba(255, 20, 147, 0.5);
-            transition: 0.3s; margin-top: 10px;
+            transition: 0.3s; margin-top: 10px; width: 80%;
         }
 
-        .game-canvas { position: relative; width: 100%; height: 250px; background: rgba(255,255,255,0.2); border-radius: 20px; margin: 10px 0; overflow: hidden; }
+        .game-canvas { position: relative; width: 100%; height: 200px; background: rgba(255,255,255,0.2); border-radius: 20px; margin: 10px 0; overflow: hidden; }
         .hunt-item { position: absolute; cursor: pointer; font-size: 2rem; }
 
-        .progress-container { width: 80%; background: #eee; border-radius: 20px; height: 25px; margin: 15px 0; overflow: hidden; }
+        .progress-container { width: 80%; background: #eee; border-radius: 20px; height: 20px; margin: 15px 0; overflow: hidden; }
         .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #FF1493, #FFA500); transition: 0.1s; }
 
-        .poem-text { font-size: 0.95rem; color: #4b0082; line-height: 1.5; font-style: italic; padding: 10px; text-align: center; }
-        .letter-img { width: 100%; border-radius: 15px; border: 6px solid white; }
+        .poem-text { font-size: 0.95rem; color: #4b0082; line-height: 1.6; font-weight: 500; padding: 10px; text-align: center; }
+        .letter-img { width: 100%; border-radius: 15px; border: 4px solid white; margin-bottom: 5px; }
         
-        .footer-msg { 
-            margin-top: 15px; padding: 12px; font-size: 0.85rem; 
-            color: #d10069; background: rgba(255,255,255,0.4); 
-            border-radius: 10px; font-weight: bold; line-height: 1.4; 
-        }
-
-        #mascot-container { position: fixed; bottom: 15px; left: 15px; z-index: 100; display: none; }
-        #mascot { width: 70px; border-radius: 15px; border: 3px solid white; }
+        #mascot-container { position: fixed; bottom: 15px; left: 15px; z-index: 1000; display: none; }
+        #mascot { width: 70px; border-radius: 15px; border: 3px solid white; cursor: pointer; }
         #speech-bubble {
-            position: absolute; bottom: 85px; left: 5px; width: 160px;
-            background: white; padding: 10px; border-radius: 15px;
+            position: absolute; bottom: 85px; left: 0; width: 180px;
+            background: white; padding: 12px; border-radius: 15px;
             font-size: 0.8rem; color: #333; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            display: none; font-weight: bold;
+            display: none; font-weight: bold; border: 2px solid #FF1493;
         }
 
         .floating { position: absolute; pointer-events: none; z-index: 1; }
@@ -68,9 +62,10 @@
 <body>
 
     <audio id="birthday-song" loop src="Yellow.mp3"></audio>
+    <audio id="baby-song" src="baby_you.mp3"></audio>
 
     <div id="page1" class="container active-page">
-        <h1>Happy Birthday, Kuk! 🎂🍊</h1>
+        <h1>Happy Birthday, Kuk! 🎂</h1>
         <p class="subtitle">A special 10-step quest for my favorite person.</p>
         <button class="next-button" onclick="startSurprise()">Start Quest 🦖</button>
     </div>
@@ -95,7 +90,7 @@
 
     <div id="page4" class="container">
         <h1>Step 3: The Orange Tree</h1>
-        <p class="subtitle">Tap the tree to grow your favorites!</p>
+        <p class="subtitle">Tap the tree to grow oranges!</p>
         <div onclick="growTree()" style="font-size: 7rem; cursor:pointer; position:relative;">🌳<div id="blooms" style="position:absolute; top:0; width:100%;"></div></div>
         <p id="tree-count" style="color:#FF1493; margin-top:10px;">Oranges: 0 / 6</p>
     </div>
@@ -115,62 +110,64 @@
 
     <div id="page7" class="container">
         <h1>Step 6: Feed the Dino</h1>
-        <p class="subtitle">He wants an orange too! Give him one.</p>
+        <p class="subtitle">Give him an orange!</p>
         <div style="font-size: 5rem; cursor:pointer;" onclick="feedDino()">🍊</div>
-        <p>Click the orange to feed him!</p>
     </div>
 
     <div id="page8" class="container">
         <h1>Step 7: Birthday Energy</h1>
-        <p class="subtitle">Fill the bar for the big reveal!</p>
+        <p class="subtitle">Fill the bar!</p>
         <div class="progress-container"><div id="energy-bar" class="progress-bar"></div></div>
         <button class="next-button" onclick="fillEnergy()">CLICK! ⚡</button>
     </div>
 
     <div id="page9" class="container">
         <h1>Step 8: Break the Box!</h1>
-        <p class="subtitle">Almost there, Kuk!</p>
+        <p class="subtitle">Almost there...</p>
         <div id="gift" onclick="tapGift()" style="font-size: 6rem; cursor:pointer;">🎁</div>
         <div class="progress-container"><div id="gift-bar" class="progress-bar"></div></div>
     </div>
 
     <div id="page10" class="container">
-        <h1>Kuk... 🌸</h1>
-        <div class="poem-text">
-            I fell for a ghost a soul I’d never seen<br>
-            and built my whole world where your footsteps had been.<br>
-            From __ to ____ I learned your every like<br>
-            turning my heart into a library of your life.<br><br>
-            You are the radiant moon, glowing far above the rest,<br>
-            while I am just a speck of dust failing every test.<br>
-            I’m the (crazy one) who stayed though I don’t quite belong<br>
-            turning my silence into the lyrics of your song.<br><br>
-            I wish for you to be the dream that never quite comes true<br>
-            because I know I’m not the one but I’ll always wait for you.<br>
-            I’ll stay a quiet listener until the very end<br>
-            loving the version of me that was only ever your friend.
+        <h1>For Your Eyes Only</h1>
+        <img src="letter.jpg" class="letter-img">
+        <p style="color: #8A2BE2; font-weight: bold; margin-bottom: 15px;">恐竜 (Dino)</p>
+        
+        <div style="background: #ffe6ea; padding: 10px; border-radius: 10px; margin-bottom: 15px; font-size: 0.8rem; color: #d63384; border: 2px dashed #ff69b4; font-weight: bold;">
+            ⚠️ u cant unlock full letter bcz:<br>
+            1. its cringe | 2. fuck u who are reading this exept kuk
         </div>
-        <button class="next-button" onclick="showPage(11)">Reveal my letter ❤️</button>
+
+        <button class="next-button" onclick="showPage(11)">Read Final Message 🌸</button>
     </div>
 
     <div id="page11" class="container">
-        <h1>Happy Birthday!</h1>
-        <img src="letter.jpg" class="letter-img">
-        <div class="footer-msg">
-            ⚠️ u cant unlock full letter bcz:<br>
-            1. its cringe | 2. fuk u who are reading this exept kuk
+        <h1>Happy Birthday Kuk! 🌸</h1>
+        <div class="poem-text">
+            Finally, your birthday is here! <br>
+            I hope you had fun playing all these small games.<br><br>
+            Honestly, I am so happy to have you in my life.<br>
+            You are a very special person and you deserve the best.<br>
+            I always notice the small things you like,<br>
+            and I'm always here to support you in whatever you do.<br><br>
+            Keep shining like the superstar you are.<br>
+            I hope this year brings you so much success and happiness.<br>
+            Don't ever change, because you are perfect just the way you are.<br><br>
+            Happy Birthday once again, to the best person!
         </div>
-        <p style="margin-top: 10px; color: #8A2BE2;">恐竜 (Dino)</p>
+        <button class="next-button" style="background: #8A2BE2; margin-top: 15px; width: 100%;" onclick="dinoRequest()">Ash has a request... 🦖</button>
     </div>
 
     <div id="mascot-container">
-        <div id="speech-bubble">Happy Birthday, Kuk!</div>
-        <img id="mascot" src="dino.jpg">
+        <div id="speech-bubble">Happy Birthday!</div>
+        <img id="mascot" src="dino.jpg" onclick="closeDino()">
     </div>
 
     <script>
         let hits=0, candleCount=0, treeCount=0, popCount=0, energy=0, giftCount=0;
         const bubble = document.getElementById('speech-bubble');
+        const song = document.getElementById('birthday-song');
+        const baby = document.getElementById('baby-song');
 
         function showPage(n) {
             document.querySelectorAll('.container').forEach(c => c.classList.remove('active-page'));
@@ -182,28 +179,17 @@
         }
 
         function updateBubble(n) {
-            const msgs = ["", "", "Hit it, Kuk!", "Blow 'em out!", "Grow some oranges!", "Find the red one!", "Pop pop pop!", "I love oranges!!", "Fill the power!", "Break it open!", "Read this...", "Happy Birthday!"];
+            const msgs = ["", "", "Hit it!", "Blow!", "Oranges!", "Find it!", "Pop!", "Feed me!", "Energy!", "Open!", "Secret!", "Happy Bday!"];
             bubble.innerText = msgs[n] || "Almost there!";
         }
 
-        function startSurprise() { 
-            document.getElementById('birthday-song').play(); 
-            showPage(2); 
-            document.getElementById('mascot-container').style.display='block'; 
-            bubble.style.display='block'; 
-            createFloating(); 
-        }
-
+        function startSurprise() { song.play(); showPage(2); document.getElementById('mascot-container').style.display='block'; bubble.style.display='block'; createFloating(); }
         function hitBall() { hits++; document.getElementById('vball-score').innerText=hits+" / 5"; gsap.to("#vball",{y:-100,yoyo:true,repeat:1,duration:0.2}); if(hits===5) showPage(3); }
-
         function checkCandles() { candleCount++; if(candleCount===3) showPage(4); }
-
         function growTree() { 
             treeCount++; 
-            const b = document.createElement('span'); 
-            b.innerText = treeCount % 2 === 0 ? "🍊" : "🌸"; 
-            b.style.position="absolute";
-            b.style.left=Math.random()*100+"px"; b.style.top=Math.random()*50+"px";
+            const b = document.createElement('span'); b.innerText = "🍊"; 
+            b.style.position="absolute"; b.style.left=Math.random()*100+"px"; b.style.top=Math.random()*50+"px";
             document.getElementById('blooms').appendChild(b);
             document.getElementById('tree-count').innerText = "Oranges: "+treeCount+" / 6";
             if(treeCount===6) showPage(5);
@@ -214,7 +200,7 @@
             for(let i=0; i<12; i++){
                 const h = document.createElement('div'); h.className="hunt-item"; h.innerText="🖤";
                 h.style.left=Math.random()*85+"%"; h.style.top=Math.random()*80+"%";
-                if(i===5) { h.innerText="❤️"; h.style.filter="drop-shadow(0 0 8px gold)"; h.onclick=()=>showPage(6); }
+                if(i===5) { h.innerText="❤️"; h.onclick=()=>showPage(6); }
                 else h.onclick=()=> { h.style.opacity="0.2"; };
                 canvas.appendChild(h);
             }
@@ -224,26 +210,27 @@
             const canvas = document.getElementById('balloon-canvas'); canvas.innerHTML='';
             for(let i=0; i<8; i++){
                 const b = document.createElement('div'); b.className="hunt-item"; b.innerText="🎈";
-                b.style.left=Math.random()*85+"%"; b.style.top="260px";
-                canvas.appendChild(b);
-                gsap.to(b, { y: -300, duration: Math.random()*3+2, repeat: -1, delay: i*0.5 });
-                b.onclick = () => { b.innerText="💥"; popCount++; document.getElementById('pop-score').innerText=`Popped: ${popCount} / 5`; if(popCount===5) showPage(7); setTimeout(()=>b.remove(), 200); };
+                b.style.left=Math.random()*85+"%"; b.style.top="210px"; canvas.appendChild(b);
+                gsap.to(b, { y: -250, duration: Math.random()*3+2, repeat: -1, delay: i*0.5 });
+                b.onclick = () => { b.innerText="💥"; popCount++; if(popCount===5) showPage(7); setTimeout(()=>b.remove(), 200); };
             }
         }
 
-        function feedDino() { 
-            gsap.to("#mascot",{scale:1.4, duration:0.2, yoyo:true, repeat:1}); 
-            bubble.innerText="I LOVE ORANGES!"; 
-            setTimeout(()=>showPage(8), 1000); 
+        function feedDino() { gsap.to("#mascot",{scale:1.4, duration:0.2, yoyo:true, repeat:1}); bubble.innerText="YUMMY!"; setTimeout(()=>showPage(8), 1000); }
+        function fillEnergy() { energy+=10; document.getElementById('energy-bar').style.width=energy+"%"; if(energy>=100) showPage(9); }
+        function tapGift() { giftCount+=10; document.getElementById('gift-bar').style.width=giftCount+"%"; if(giftCount>=100) showPage(10); }
+
+        function dinoRequest() {
+            song.pause(); baby.play();
+            bubble.style.width = '200px';
+            bubble.innerHTML = `Kuk, birthday tax! 🎤 <br> Sing for me? <br><br> I want to hear the song I heard the first time... u remember? <br> <button onclick="closeDino()" style="background:#FF1493; color:white; border:none; padding:5px; border-radius:5px; margin-top:5px; cursor:pointer;">Okay!</button>`;
         }
 
-        function fillEnergy() { energy+=10; document.getElementById('energy-bar').style.width=energy+"%"; if(energy>=100) showPage(9); }
-
-        function tapGift() { giftCount+=10; document.getElementById('gift-bar').style.width=giftCount+"%"; gsap.to("#gift",{scale:1.2, duration:0.1, yoyo:true, repeat:1}); if(giftCount>=100) showPage(10); }
+        function closeDino() { baby.pause(); baby.currentTime=0; song.play(); bubble.style.width = '180px'; bubble.innerText = "Happy Birthday!"; }
 
         function createFloating() {
             const syms = ['✨', '🍊', '❤️'];
-            for(let i=0; i<25; i++) {
+            for(let i=0; i<20; i++) {
                 const e = document.createElement('div'); e.className='floating'; 
                 e.innerText= syms[Math.floor(Math.random()*syms.length)];
                 e.style.left=Math.random()*100+"vw"; e.style.top="-50px"; document.body.appendChild(e);
